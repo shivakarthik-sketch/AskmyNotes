@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>AskMyNotes</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      background: linear-gradient(
+        -45deg,
+        #0f172a,
+        #1e3a8a,
+        #0f766e,
+        #312e81
+      );
+
+      background-size: 400% 400%;
+      animation: gradient 12s ease infinite;
+    }
+
+    @keyframes gradient {
+
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Glass Effect */
+    .glass {
+      backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+
+<body class="bg-animation min-h-screen flex items-center justify-center px-4 py-10">
+
+  <!-- Main Card -->
+  <div class="glass w-full max-w-3xl rounded-3xl border border-white/20 shadow-2xl p-8">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+
+      <h1
+        class="text-5xl font-extrabold bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+        AskMyNotes
+      </h1>
+
+      <p class="text-slate-200 mt-4 text-lg">
+        Upload your PDF notes and ask questions using AI ✨
+      </p>
+
+    </div>
+
+    <div class="space-y-8">
+
+      <!-- Upload Section -->
+      <div class="bg-white/10 border border-white/10 rounded-2xl p-6 shadow-lg">
+
+        <label
+          for="pdf-input"
+          class="block text-sm font-semibold text-white mb-4">
+
+          Upload PDF Notes
+
+        </label>
+
+        <input
+          type="file"
+          id="pdf-input"
+          accept=".pdf"
+          class="block w-full text-sm text-slate-200
+          file:mr-4
+          file:py-3
+          file:px-6
+          file:rounded-full
+          file:border-0
+          file:text-sm
+          file:font-semibold
+          file:bg-gradient-to-r
+          file:from-cyan-500
+          file:to-blue-600
+          file:text-white
+          hover:file:scale-105
+          transition-all
+          duration-300
+          cursor-pointer"
+        />
+
+        <!-- Upload Status -->
+        <div
+          id="upload-status"
+          class="text-sm text-slate-300 mt-4">
+          No file uploaded yet.
+        </div>
+
+      </div>
+
+      <!-- Question Section -->
+      <div class="bg-white/10 border border-white/10 rounded-2xl p-6 shadow-lg">
+
+        <label
+          for="question"
+          class="block text-sm font-semibold text-white mb-4">
+
+          Ask Your Question
+
+        </label>
+
+        <textarea
+          id="question"
+          rows="4"
+          placeholder="What do my notes say about AI?"
+          class="w-full rounded-2xl border border-white/20
+          bg-white/10
+          text-white
+          placeholder-slate-300
+          p-4
+          focus:ring-4
+          focus:ring-cyan-400
+          focus:border-cyan-300
+          outline-none
+          transition"></textarea>
+
+        <div class="flex items-center justify-between mt-5">
+
+          <div
+            id="status"
+            class="text-xs text-slate-300">
+          </div>
+
+          <button
+            id="ask-btn"
+            class="bg-gradient-to-r from-cyan-500 to-blue-600
+            hover:from-cyan-400 hover:to-blue-500
+            text-white
+            font-semibold
+            px-8
+            py-3
+            rounded-2xl
+            shadow-lg
+            hover:shadow-cyan-500/40
+            transition-all
+            duration-300
+            active:scale-95">
+
+            Ask AI
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Answer Section -->
+      <div class="bg-white/10 border border-white/10 rounded-2xl p-6 shadow-lg">
+
+        <div class="flex items-center justify-between mb-4">
+
+          <label class="text-sm font-semibold text-white">
+            AI Answer
+          </label>
+
+        </div>
+
+        <!-- Answer Box -->
+        <div
+          id="answer"
+          class="min-h-[140px]
+          rounded-2xl
+          border border-white/10
+          bg-black/20
+          p-5
+          text-slate-100
+          shadow-inner">
+
+          <div
+            id="answer-text"
+            class="italic text-slate-300">
+
+            Your answer will appear here...
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+
+    const pdfInput = document.getElementById("pdf-input");
+    const uploadStatus = document.getElementById("upload-status");
+
+    pdfInput.addEventListener("change", function () {
+
+      if (pdfInput.files.length > 0) {
+
+        const file = pdfInput.files[0];
+
+        uploadStatus.textContent = `✅ Uploaded: ${file.name}`;
+        uploadStatus.classList.remove("text-slate-300");
+        uploadStatus.classList.add("text-green-300");
+
+      } else {
+
+        uploadStatus.textContent = "No file uploaded yet.";
+        uploadStatus.classList.remove("text-green-300");
+        uploadStatus.classList.add("text-slate-300");
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
