@@ -17,6 +17,7 @@
   />
 
   <style>
+
     body {
       font-family: "Poppins", sans-serif;
     }
@@ -55,7 +56,9 @@
       backdrop-filter: blur(14px);
       background: rgba(255, 255, 255, 0.15);
     }
+
   </style>
+
 </head>
 
 <body class="bg-animation min-h-screen flex items-center justify-center px-4 py-10">
@@ -68,7 +71,9 @@
 
       <h1
         class="text-5xl font-extrabold bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+
         AskMyNotes
+
       </h1>
 
       <p class="text-slate-200 mt-4 text-lg">
@@ -115,8 +120,7 @@
         <!-- Upload Status -->
         <div
           id="upload-status"
-          class="text-sm text-slate-300 mt-4">
-          No file uploaded yet.
+          class="min-h-[1.25rem] mt-2">
         </div>
 
       </div>
@@ -215,29 +219,98 @@
 
   </div>
 
-  <!-- JavaScript -->
+  <!-- Combined JavaScript -->
   <script>
 
-    const pdfInput = document.getElementById("pdf-input");
-    const uploadStatus = document.getElementById("upload-status");
+    document.addEventListener("DOMContentLoaded", function () {
 
-    pdfInput.addEventListener("change", function () {
+      // Elements
+      const pdfInput = document.getElementById("pdf-input");
+      const uploadStatus = document.getElementById("upload-status");
 
-      if (pdfInput.files.length > 0) {
+      const askBtn = document.getElementById("ask-btn");
+      const questionInput = document.getElementById("question");
+
+      const answerText = document.getElementById("answer-text");
+
+      // File Selection
+      pdfInput.addEventListener("change", function () {
 
         const file = pdfInput.files[0];
 
-        uploadStatus.textContent = `✅ Uploaded: ${file.name}`;
-        uploadStatus.classList.remove("text-slate-300");
-        uploadStatus.classList.add("text-green-300");
+        // No file selected
+        if (!file) {
 
-      } else {
+          uploadStatus.textContent = "";
+          uploadStatus.className = "";
 
-        uploadStatus.textContent = "No file uploaded yet.";
-        uploadStatus.classList.remove("text-green-300");
-        uploadStatus.classList.add("text-slate-300");
+          return;
+        }
 
-      }
+        // Show selected filename
+        uploadStatus.textContent =
+          `Selected "${file.name}" (ready to upload)`;
+
+        // Green styling
+        uploadStatus.className =
+          "text-sm text-green-600 mt-2 min-h-[1.25rem]";
+
+      });
+
+      // Ask AI Button
+      askBtn.addEventListener("click", async function () {
+
+        const file = pdfInput.files[0];
+        const question = questionInput.value.trim();
+
+        // Validation
+        if (!file) {
+
+          alert("Please upload a PDF.");
+          return;
+        }
+
+        if (!question) {
+
+          alert("Please enter a question.");
+          return;
+        }
+
+        // Loading message
+        answerText.textContent = "Thinking...";
+
+        // FormData
+        const formData = new FormData();
+
+        formData.append("pdf", file);
+        formData.append("question", question);
+
+        try {
+
+          // Send request to Flask backend
+          const response = await fetch(
+            "http://127.0.0.1:5000/ask",
+            {
+              method: "POST",
+              body: formData
+            }
+          );
+
+          // Convert response to JSON
+          const data = await response.json();
+
+          // Display answer
+          answerText.textContent = data.answer;
+
+        } catch (error) {
+
+          answerText.textContent =
+            "Error connecting to backend.";
+
+          console.error(error);
+        }
+
+      });
 
     });
 
